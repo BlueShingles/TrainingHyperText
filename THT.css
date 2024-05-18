@@ -1,0 +1,45 @@
+program{
+
+}
+day{
+	background: rgb(94,94,94);
+}
+exercise{
+	
+}
+set{
+	
+}
+/* width */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+
+.wrapper{
+	max-height: 800px;
+	overflow: scroll;
+	transform-origin: top;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+.wrapper.noHeight{
+	max-height: 0px;
+	overflow: hidden;
+}
+
+body{
+	background: rgb(80,0,144);
+background: linear-gradient(90deg, rgba(80,0,144,1) 0%, rgba(0,0,207,1) 71%, rgba(0,212,255,1) 100%);
+}
+.text-semi-muted{
+	color: #ababab !important;
+}
+.grayLine{
+	background-color: #efefef;
+}
