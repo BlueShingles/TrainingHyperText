@@ -8,14 +8,62 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
-<program description="Basic Program" toolTip="This program is meant to show what THT can do" title="Example Program" startDate="2024-05-02" endDate="2024-06-31">
-	<day title="Upper" toolTip="Extra information goes here" description="Two horizontal moves and one vertical">
-		<exercise name="Bench Press" toolTip="here you can put a special cue or visualization" load="56" unit="kg" description="All to 2 RIR">
+<program title="THT Test Program" startDate="2024-05-02" endDate="2024-06-31" description="Basic UL Program" toolTip="This program is meant to show what THT can do">
+	<day title="Upper" tags="monday,friday" toolTip="Extra information goes here" description="Two horizontal moves and one vertical">
+		<exercise name="Bench Press" toolTip="here you can put a special cue or visualization" description="All to 2 RIR">
 			<set amount="3" reps="12" description="For good volume" toolTip="This is to competition form">
-				<log date="2024-05-02" load="50" unit="kg"></log>
-				<log date="2024-05-05" load="52" unit="kg"></log>
-				<log date="2024-05-12" load="53" unit="kg"></log>
-				<log date="2024-05-16" toolTip="maybe they slept badly here" reps="12/12/11" load="56" unit="kg"></log>
+				<log date="2024-05-02" load="80" unit="kg"></log>
+				<log date="2024-05-05" load="82" unit="kg"></log>
+				<log date="2024-05-12" load="83" unit="kg"></log>
+				<log date="2024-05-16" toolTip="maybe they slept badly here" reps="12/12/11" load="86" unit="kg"></log>
+			</set>
+		</exercise>
+		<exercise name="Yates Rows" toolTip="you can replace them with any barbell row variation" description="All to 3 RIR">
+			<set amount="3" reps="8" description="Focus on the eccentric" toolTip="Remeber to stay as parallel to the floor as you can">
+				<log date="2024-05-02" load="70" unit="kg"></log>
+				<log date="2024-05-05" load="72" unit="kg"></log>
+				<log date="2024-05-12" load="73" unit="kg"></log>
+				<log date="2024-05-16" toolTip="That looks like a trend" reps="8/8/5" load="76" unit="kg"></log>
+			</set>
+		</exercise>
+		<exercise name="Pullups" toolTip="Can be replaced with lat pulldowns" description="Weighted if need be">
+			<set amount="3" reps="5" description="Any grip is fine" toolTip="Try not to kip">
+				<log date="2024-05-02" load="85+3" unit="kg"></log>
+				<log date="2024-05-05" load="85+4" unit="kg"></log>
+				<log date="2024-05-12" load="85+5" unit="kg"></log>
+				<log date="2024-05-16" toolTip="Wow, that was pretty good" reps="5/5/7" load="85+6" unit="kg"></log>
+			</set>
+		</exercise>
+	</day>
+		<day title="Lower" tags="tuesday,saturday" toolTip="Extra information goes here" description="Rounds out the upper">
+		<exercise name="Push Press" toolTip="It's barely as fatiguing as the next two" description="Should feel relatively easy">
+			<set amount="2" reps="6" description="to keep up the overhead position" toolTip="Remember to maintain your brace">
+				<log date="2024-05-02" load="65" unit="kg"></log>
+				<log date="2024-05-05" load="66" unit="kg"></log>
+				<log date="2024-05-12" load="67" unit="kg"></log>
+				<log date="2024-05-16" toolTip="definitely overshot the weight here" reps="6/6/3" load="69" unit="kg"></log>
+			</set>
+		</exercise>
+		<exercise name="Romanian Deadlift"  tags="belt,janky setup" toolTip="Seems this person has issues doing rdls on their gym" description="Always look up">
+			<set amount="4" reps="8" description="Use straps if you struggle with holding the bar" toolTip="Brace into the belt, don't overtighten it">
+				<log date="2024-05-02" load="120" unit="kg"></log>
+				<log date="2024-05-05" load="122" unit="kg"></log>
+				<log date="2024-05-12" load="124" unit="kg"></log>
+				<log date="2024-05-16" toolTip="A reflex of the push press issue" reps="8/8/8" load="124" unit="kg"></log>
+			</set>
+		</exercise>
+		<exercise name="High Bar Squats" tags="belt,two kinds" toolTip="This is pretty important so take your time" description="Strength sets then volume sets">
+			<set amount="2" reps="2" description="3+ RIR doubles" toolTip="the weight on the bar here is much more important than the next 3 sets so feel free to limit the load in the next one">
+				<log date="2024-05-02" load="135" unit="kg"></log>
+				<log date="2024-05-05" load="135" unit="kg"></log>
+				<log date="2024-05-12" load="137" unit="kg"></log>
+				<log date="2024-05-16" toolTip="That wasn't a good idea" reps="2/1" load="139" unit="kg"></log>
+			</set>
+			<set amount="3" reps="8" description="AMRAP the last" toolTip="not much more to say">
+				<log date="2024-05-02" reps="8/8/12" load="85" unit="kg"></log>
+				<log date="2024-05-05" reps="8/8/7" load="86" unit="kg"></log>
+				<log date="2024-05-12" reps="8/8/10" load="86" unit="kg"></log>
+				<log date="2024-05-16" reps="8/8/10" load="86" unit="kg"></log>
 			</set>
 		</exercise>
 	</day>
