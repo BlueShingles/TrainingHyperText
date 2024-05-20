@@ -67,13 +67,13 @@ function BuildTemplate(){
 			if(i % 2 === 0) logs[i].classList.add("grayLine");
 			
 			let repsInner = wrapContent("p", buildRepString(logs[i], sets[j]));
-			let repsOuter = wrapContent("div", repsInner, ["col"]);
+			let repsOuter = wrapContent("div", repsInner, ["col", `text-center`]);
 			
-			let dateInner = wrapContent("strong", getAt(logs[i], "date"));
-			let dateOuter = wrapContent("div", dateInner, ["col"]);
+			let dateInner = wrapContent("div", getAt(logs[i], "date") + ` - ` + getWeekDay(getAt(logs[i], "date")));
+			let dateOuter = wrapContent("div", dateInner, ["col", `text-center`]);
 			
 			let unit = wrapContent("small", getAt(logs[i], "unit"));
-			let fullLoad = wrapContent("div", getAt(logs[i], "load") + unit, ["col"]);
+			let fullLoad = wrapContent("div", getAt(logs[i], "load") + ` ` + unit, ["col", `text-center`]);
 			
 			let tableInner = wrapContent("div", dateOuter + repsOuter + fullLoad, ["row m-2 p-2"]);
 			let tableOuter = wrapContent("div", tableInner, ["col"]);
@@ -127,6 +127,19 @@ function addCollapse(el, target, left, top, closed){
 	}	
 }
 
+function getWeekDay(dateStr){
+	let date = new Date(dateStr);
+	if(date == `Invalid Date`) return ``;
+	let weekNum = date.getDay();
+	if(weekNum == 0) return `Sunday`;
+	if(weekNum == 1) return `Monday`;
+	if(weekNum == 2) return `Tuesday`;
+	if(weekNum == 3) return `Wednesday`;
+	if(weekNum == 4) return `Thursday`;
+	if(weekNum == 5) return `Friday`;
+	if(weekNum == 6) return `Saturday`;
+}
+
 function collapseDiv(btn, target){
 	document.getElementById(target).classList.toggle("noHeight");
 	if(btn.textContent == "▲") btn.textContent = "▼"
@@ -149,7 +162,7 @@ function buildProgramTimeCounter(program){
 		daysRemaining = datediff(Date.now(), endDate) + " Days left";
 	}
 	
-	let result = wrapContent("div", startStr + " to " + endStr + addSpace(10) + daysRemaining, ["row", "m-2", "ml-5"]);
+	let result = wrapContent("div", `From ` + startStr + ` to ` + endStr + addSpace(10) + daysRemaining, ["row", "m-2", "ml-5"]);
 	return result;
 }
 
