@@ -1,10 +1,24 @@
 let separators = ["/","|",",",";","_"]
 
+let pageSource = "";
+
+let pageAlterNumber = 0;
+
+let saveButton = `<div class="row m-1 p-2">
+					<div class="col-10"></div>
+					<div class="col-2">
+						<div class="m-3 btn btn-success" onclick="copyPageCode();">Copy Page Source</div>
+					</div>
+					</div>`;
+
 function BuildTemplate(){
+	
+	addToDiv(document.getElementsByTagName("body")[0], saveButton, "first");
+	
 	let programs = document.getElementsByTagName("program");
 	for(let i = 0; i < programs.length; i++){
 		
-		toggleClasses(programs[i], ["card","bg-dark","text-light","p-2","m-5","rounded"]);
+		toggleClasses(programs[i], ["card","bg-dark","text-light","p-2","ml-5","mr-5","mb-5","mt-2","rounded"]);
 		
 		
 
@@ -98,6 +112,24 @@ function getAt(el, attribute, type){
 	return at;
 }
 
+function copyPageCode(){
+	navigator.clipboard.writeText(unescape(removeLogEnds(pageSource)));
+	if(pageAlterNumber == 0){
+		Swal.fire({
+			title: "There is no change in the source text",
+			text: "Did you forget to add a log?",
+			icon: "warning"
+		});
+	}else{
+		Swal.fire({
+			title: "Text was loaded into you clipboard",
+			text: "Please paste it into the original document or a new document to save changes!",
+			icon: "success"
+		});
+	}
+	
+}
+
 function addTags(el){
 	let tags = getArrayFrom(getAt(el, "tags"));
 	let tagString = "";
@@ -142,8 +174,108 @@ function getWeekDay(dateStr){
 
 function collapseDiv(btn, target){
 	document.getElementById(target).classList.toggle("noHeight");
+	if(btn == undefined) return;
 	if(btn.textContent == "▲") btn.textContent = "▼"
 	else btn.textContent = "▲"
+}
+
+function getPageText(){
+	const txt = document.documentElement.outerHTML;
+	return txt;
+}
+
+function updatePageText(txt){
+	document.documentElement.innerHTML = txt.split("<html>").join("").split("</html>").join("");
+}
+
+function createLogEnds(){
+	let sets = document.getElementsByTagName("set");
+	for(let j = 0; j < sets.length; j++){
+		let end = wrapContent("logend", "", [], "logend_of_" + j);
+		addToDiv(sets[j], end, "last");
+	}
+}
+
+function addLogForms(){
+	let logEnds = document.getElementsByTagName("logend");
+
+	for(let i = 0; i < logEnds.length; i++){
+		
+		let setPlaceholderString = buildRepString(undefined, document.getElementsByTagName("set")[i]);
+		
+		let spacer  = wrapContent("div","", ["col-1"]);
+		
+		let addUnit = wrapContent("input", "", ["m-1", "reps"], "unitInput_of_"+i, [{key:"placeholder", value:"Unit: kg, lbs, seconds etc..."}]);
+		let addUnitCols = wrapContent("div", addUnit, ["col", "text-center", "mt-3"]);
+		
+		let addWeight = wrapContent("input", "", ["m-1", "reps"], "weightInput_of_"+i, [{key:"placeholder",value:"Load"}]);
+		let addWeightCols = wrapContent("div", addWeight, ["col", "text-center", "mt-3"]);
+		
+		let addExtra = wrapContent("input", "", ["m-1", "reps"], "extraInput_of_"+i, [{key:"placeholder",value:"Extra Info"}]);
+		let addExtraCols = wrapContent("div", addExtra, ["col", "text-center", "mt-3"]);
+		
+		let addReps = wrapContent("input", "", ["m-1", "reps"], "repsInput_of_"+i, [{key:"placeholder",value:setPlaceholderString}]);
+		let addRepsCols = wrapContent("div", addReps, ["col", "text-center", "mt-3"]);
+		
+				
+		let addButton = wrapContent("div", "Add", ["btn", "btn-success", "m-2"],"button_of_" + i, [{key:"onclick", value:"createLog("+ i +")"}]);
+		let addButtonCol = wrapContent("div", addButton, ["col", "mt-1"]);
+		
+		let tableInner = wrapContent("div", spacer + addExtraCols + addRepsCols + addWeightCols + addUnitCols + addButtonCol, ["row m-2 p-2"]);
+		let tableOuter = wrapContent("div", tableInner, ["col"]);
+
+		addToDiv(logEnds[i], tableOuter, "outsideFirst", "log_form_of" + i);
+	}
+}
+
+function createLog(divisorNum){
+	let divisor = document.getElementsByTagName("logend")[divisorNum].outerHTML;
+	
+	let unit = document.getElementById("unitInput_of_"+divisorNum).value;
+		
+	let weight = document.getElementById("weightInput_of_"+divisorNum).value;
+		
+	let extra = document.getElementById("extraInput_of_"+divisorNum).value;
+	
+	let reps = document.getElementById("repsInput_of_"+divisorNum).value;
+	let repsStr = "";
+	
+	if(reps.trim() != ""){
+		repsStr = `reps="`+ reps +`"`; 
+	}
+	
+	pageAlterNumber++;
+		
+	let newSourceArray = pageSource.split(divisor);
+	
+	newSourceArray[0] += `<log date="` + getStringOfDateNow() +`" `+ repsStr +` load="`+ weight +`" unit="`+ unit +`" toolTip="`+ extra +`"></log>\n`;
+	let newSource = newSourceArray.join(divisor);
+	newSource = removeLogEnds(newSource);
+	pageSource = newSource;
+	updatePageText(pageSource);
+	createLogEnds();
+	addLogForms();
+    BuildTemplate();
+	collapseDiv(undefined, "logs_of_" + divisorNum);
+}
+
+function getStringOfDateNow(){
+	var date = new Date();
+	return date.toISOString().split("T")[0];
+}
+
+function getTagOfDiv(str){
+	return str.split("<").join("").split(" ").join("").split(">")[0];
+}
+
+function removeLogEnds(txt){
+	let sets = document.getElementsByTagName("set");
+	for(let j = 0; j < sets.length; j++){
+		let removeStr = `<logend id="logend_of_`+ j +`" class=""></logend>`
+		console.log(removeStr);
+		txt = txt.split(removeStr).join("");
+	}
+	return txt;
 }
 
 function buildProgramTimeCounter(program){
@@ -175,24 +307,37 @@ function addSpace(num){
 }
 
 function buildRepString(log, set){
-	if(getAt(log, "reps") != ""){
-		return getAt(log, "reps");
-	}else{
-		let setNumber = parseInt(getAt(set,"amount"));
-	    let setProgrammedReps = getAt(set,"reps");
-		let repsStr = "";
-		for(k = 0; k < setNumber; k++){
-			repsStr += setProgrammedReps + ((k == setNumber-1) ? "" : "/");
+	try{
+		if(log != undefined){ 
+		if(getAt(log, "reps") != ""){
+			return getAt(log, "reps");
 		}
-		return repsStr;
 	}
+	let setNumber = parseInt(getAt(set,"amount"));
+	let setProgrammedReps = getAt(set,"reps");
+	let repsStr = "";
+	for(k = 0; k < setNumber; k++){
+		repsStr += setProgrammedReps + ((k == setNumber-1) ? "" : "/");
+	}
+	return repsStr;
+	}catch{ return ""}
 }
 
-function wrapContent(tag, content, classes, id){
+function wrapContent(tag, content, classes, id, custonAttributes){
 	if(classes == undefined) classes = [];
 	let idStr = "";
 	if(id != undefined) idStr = `id='`+ id +`'`;
-	return "<"+tag+" "+ idStr +" class='"+ classes.join(" ") +"'>" + content + "</"+tag+">";
+	
+	let customAttString = "";
+	if(custonAttributes != undefined){
+		if(custonAttributes.length != undefined && custonAttributes.length > 0){
+			for(let i = 0; i < custonAttributes.length; i++){
+				customAttString += " " + custonAttributes[i].key + "='" + custonAttributes[i].value + "' ";
+			}
+		}
+	}
+	
+	return "<"+tag+" "+ idStr +" "+ customAttString +" class='"+ classes.join(" ") +"'>" + content + "</"+tag+">";
 }
 
 function toggleClasses(el, classes){
@@ -225,6 +370,29 @@ function datediff(first, second) {
     return Math.round((second - first) / (1000 * 60 * 60 * 24));
 }
 
+function format(html) {
+    var tab = '\t';
+    var result = '';
+    var indent= '';
+
+    html.split(/>\s*</).forEach(function(element) {
+        if (element.match( /^\/\w/ )) {
+            indent = indent.substring(tab.length);
+        }
+
+        result += indent + '<' + element + '>\r\n';
+
+        if (element.match( /^<?\w[^>]*[^\/]$/ ) && !element.startsWith("input")  ) { 
+            indent += tab;              
+        }
+    });
+
+    return result.substring(1, result.length-3);
+}
+
  document.addEventListener("DOMContentLoaded", (event) => {
-    BuildTemplate()
+	createLogEnds();
+	pageSource = getPageText();
+	addLogForms();
+    BuildTemplate();
   });

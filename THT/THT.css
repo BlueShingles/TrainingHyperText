@@ -1,6 +1,9 @@
 program{
 
 }
+input{
+	border: 0px;
+}
 day{
 	background: rgb(94,94,94);
 }
