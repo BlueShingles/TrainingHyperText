@@ -1,19 +1,9 @@
-program{
-
-}
 input{
 	border: 0px;
 }
 day{
 	background: rgb(94,94,94);
 }
-exercise{
-	
-}
-set{
-	
-}
-
 .pointer{
 	cursor: pointer;
 }
@@ -22,7 +12,6 @@ set{
   width: 0px;
   height: 0px;
 }
-
 
 .wrapper{
 	max-height: 800px;

@@ -5,9 +5,9 @@ let pageSource = "";
 let pageAlterNumber = 0;
 
 let saveButton = `<div class="row m-1 p-2">
-					<div class="col-10"></div>
-					<div class="col-2">
-						<div class="m-3 btn btn-success" onclick="copyPageCode();">Copy Page Source</div>
+					<div class="col-7"></div>
+					<div class="col-5">
+						<div class="m-3 btn btn-success float-right" onclick="copyPageCode();">Copy Page Source</div>
 					</div>
 					</div>`;
 
@@ -203,8 +203,6 @@ function addLogForms(){
 		
 		let setPlaceholderString = buildRepString(undefined, document.getElementsByTagName("set")[i]);
 		
-		let spacer  = wrapContent("div","", ["col-1"]);
-		
 		let addUnit = wrapContent("input", "", ["m-1", "reps"], "unitInput_of_"+i, [{key:"placeholder", value:"Unit: kg, lbs, seconds etc..."}]);
 		let addUnitCols = wrapContent("div", addUnit, ["col", "text-center", "mt-3"]);
 		
@@ -221,7 +219,7 @@ function addLogForms(){
 		let addButton = wrapContent("div", "Add", ["btn", "btn-success", "m-2"],"button_of_" + i, [{key:"onclick", value:"createLog("+ i +")"}]);
 		let addButtonCol = wrapContent("div", addButton, ["col", "mt-1"]);
 		
-		let tableInner = wrapContent("div", spacer + addExtraCols + addRepsCols + addWeightCols + addUnitCols + addButtonCol, ["row m-2 p-2"]);
+		let tableInner = wrapContent("div", addExtraCols + addRepsCols + addWeightCols + addUnitCols + addButtonCol, ["row m-2 p-3 pl-5"]);
 		let tableOuter = wrapContent("div", tableInner, ["col"]);
 
 		addToDiv(logEnds[i], tableOuter, "outsideFirst", "log_form_of" + i);
