@@ -30,9 +30,31 @@ day{
 }
 
 body{
-	background: rgb(80,0,144);
-background: linear-gradient(90deg, rgba(80,0,144,1) 0%, rgba(0,0,207,1) 71%, rgba(0,212,255,1) 100%);
+	background: linear-gradient(41deg, #00ffbd, #006bff, #00285f, #8907b0);
+    background-size: 800% 800%;
+
+    -webkit-animation: BackAnimation 30s ease infinite;
+    -moz-animation: BackAnimation 30s ease infinite;
+    animation: BackAnimation 30s ease infinite;
 }
+
+
+@-webkit-keyframes BackAnimation {
+    0%{background-position:97% 0%}
+    50%{background-position:4% 100%}
+    100%{background-position:97% 0%}
+}
+@-moz-keyframes BackAnimation {
+    0%{background-position:97% 0%}
+    50%{background-position:4% 100%}
+    100%{background-position:97% 0%}
+}
+@keyframes BackAnimation {
+    0%{background-position:97% 0%}
+    50%{background-position:4% 100%}
+    100%{background-position:97% 0%}
+}
+
 .text-semi-muted{
 	color: #ababab !important;
 }

@@ -202,25 +202,21 @@ function addLogForms(){
 	for(let i = 0; i < logEnds.length; i++){
 		
 		let setPlaceholderString = buildRepString(undefined, document.getElementsByTagName("set")[i]);
+
+		let addUnitCols = wrapContent("input", "", ["m-2", "mt-4","col-2", "mt-3"], "unitInput_of_"+i, [{key:"placeholder", value:"Unit: kg, lbs, seconds etc..."}]);
 		
-		let addUnit = wrapContent("input", "", ["m-1", "reps"], "unitInput_of_"+i, [{key:"placeholder", value:"Unit: kg, lbs, seconds etc..."}]);
-		let addUnitCols = wrapContent("div", addUnit, ["col", "text-center", "mt-3"]);
+		let addWeightCols = wrapContent("input", "", ["m-2", "mt-4","col-2"	], "weightInput_of_"+i, [{key:"placeholder",value:"Load"}]);
 		
-		let addWeight = wrapContent("input", "", ["m-1", "reps"], "weightInput_of_"+i, [{key:"placeholder",value:"Load"}]);
-		let addWeightCols = wrapContent("div", addWeight, ["col", "text-center", "mt-3"]);
+		let addExtraCols = wrapContent("input", "", ["m-2", "mt-4","col-2", "mt-3"], "extraInput_of_"+i, [{key:"placeholder",value:"Extra Info"}]);
 		
-		let addExtra = wrapContent("input", "", ["m-1", "reps"], "extraInput_of_"+i, [{key:"placeholder",value:"Extra Info"}]);
-		let addExtraCols = wrapContent("div", addExtra, ["col", "text-center", "mt-3"]);
-		
-		let addReps = wrapContent("input", "", ["m-1", "reps"], "repsInput_of_"+i, [{key:"placeholder",value:setPlaceholderString}]);
-		let addRepsCols = wrapContent("div", addReps, ["col", "text-center", "mt-3"]);
+		let addRepsCols = wrapContent("input", "", ["m-2", "mt-4", "col-2", "mt-3"], "repsInput_of_"+i, [{key:"placeholder",value:setPlaceholderString}]);
 		
 				
 		let addButton = wrapContent("div", "Add", ["btn", "btn-success", "m-2"],"button_of_" + i, [{key:"onclick", value:"createLog("+ i +")"}]);
-		let addButtonCol = wrapContent("div", addButton, ["col", "mt-1"]);
+		let addButtonCol = wrapContent("div", addButton, ["col-1", "m-2", "mt-4"]);
 		
 		let tableInner = wrapContent("div", addExtraCols + addRepsCols + addWeightCols + addUnitCols + addButtonCol, ["row m-2 p-3 pl-5"]);
-		let tableOuter = wrapContent("div", tableInner, ["col"]);
+		let tableOuter = wrapContent("div", tableInner, ["col", "ml-5"]);
 
 		addToDiv(logEnds[i], tableOuter, "outsideFirst", "log_form_of" + i);
 	}
