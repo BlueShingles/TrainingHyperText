@@ -1,5 +1,7 @@
 let separators = ["/","|",",",";","_"]
 
+let acceptedUnits = ["kilo","kg","lb","bodyweight","bw","pound","second","sec","minute","min","hour","hr"];
+
 let pageSource = "";
 
 let pageAlterNumber = 0;
@@ -13,8 +15,23 @@ let saveButton = `<div class="row m-1 p-2">
 
 function BuildTemplate(){
 	
-	addToDiv(document.getElementsByTagName("body")[0], saveButton, "first");
+	BuildPreProgram();
+	BuildPrograms();
+	BuildDays();
+	BuildExercises();
+	BuildSets();
+	BuildStats();
 	
+	$(function () {
+	  $('[data-toggle="tooltip"]').tooltip()
+	})
+}
+
+function BuildPreProgram(){
+	addToDiv(document.getElementsByTagName("body")[0], saveButton, "first");
+}
+
+function BuildPrograms(){
 	let programs = document.getElementsByTagName("program");
 	for(let i = 0; i < programs.length; i++){
 		
@@ -30,7 +47,9 @@ function BuildTemplate(){
 		addToDiv(programs[i], title, "first");
 		addTooltip(programs[i]);
 	}
-	
+}
+
+function BuildDays(){
 	let days = document.getElementsByTagName("day");
 	for(let i = 0; i < days.length; i++){
 		toggleClasses(days[i], ["w-100","p-2","rounded", "mt-4"]);
@@ -44,7 +63,9 @@ function BuildTemplate(){
 		addTooltip(days[i]);
 		addCollapse(days[i], ("exercises_of_" + i), "92%", "0px");
 	}
-	
+}
+
+function BuildExercises(){
 	let exercises = document.getElementsByTagName("exercise");
 	for(let i = 0; i < exercises.length; i++){
 		toggleClasses(exercises[i], ["card","bg-light","text-dark","p-2","m-1","rounded"]);
@@ -55,7 +76,9 @@ function BuildTemplate(){
 		addToDiv(exercises[i], title, "first");
 		addTooltip(exercises[i]);
 	}
-	
+}
+
+function BuildSets(){
 	let sets = document.getElementsByTagName("set");
 	
 	for(let j = 0; j < sets.length; j++){
@@ -96,9 +119,171 @@ function BuildTemplate(){
 			addTooltip(logs[i]);
 		}
 	}
-	$(function () {
-	  $('[data-toggle="tooltip"]').tooltip()
-	})
+}
+
+function BuildStats(){
+	let stats = document.getElementsByTagName("stats");
+	
+	for(let i = 0; i < stats.length; i++){
+		toggleClasses(stats[i], ["card","bg-info","p-2","ml-5","mr-5","mb-5","mt-2","rounded"]);
+		let title = wrapContent("h5", "Analytics", ["m-2", "text-light"]);
+		addToDiv(stats[i], title, "first");
+	}
+	
+	let increases = document.getElementsByTagName("WeightIncreases");
+	for(let i = 0; i < increases.length; i++){
+		toggleClasses(increases[i], ["card","bg-light","p-2","ml-5","mr-5","mb-5","mt-2","rounded"]);
+		
+		let allLogs = [];
+		let units = [];
+		let firstDate = null;
+		let lastDate = null
+		let sumFirst = 0;
+		let sumLast = 0;
+		
+			let movementHeader = wrapContent("div", "Exercise", ["m-2", "text-center", "col"]);
+			let initialDivHeader = wrapContent("div", "Initial", ["m-2", "text-center", "col"]);
+			let peakDivHeader = wrapContent("div", "Peak", ["m-2", "text-center", "col"]);
+			let lastDivHeader = wrapContent("div", "Most Recent", ["m-2", "text-center", "col"]);
+			let rowHeader = wrapContent("div", movementHeader+ initialDivHeader + peakDivHeader + lastDivHeader, ["m-2", "bg-dark", "text-light", "text-center", "row"]);
+			addToDiv(increases[i], rowHeader, "last");
+		
+		let exercises = document.getElementsByTagName("exercise");
+	
+		for(let j = 0; j < exercises.length; j++){
+			let sets = exercises[j].getElementsByTagName("set");
+			for(let k = 0; k < sets.length; k++){
+				let nameAppend = "";
+				if(k > 0) nameAppend = " "+(k+1);
+				let instance = {Name: getAt(exercises[j], "name") + nameAppend, Logs: [], Highest: 0.0, Lowest: 9000000000};
+				let logs = sets[k].getElementsByTagName("log");
+				for(let p = 0; p < logs.length; p++){
+					let logLoad = parseWeight(getAt(logs[p], "load"));
+					if(logLoad > instance.Highest) instance.Highest = logLoad;
+					if(logLoad < instance.Lowest) instance.Lowest = logLoad;
+					let logUnit = getAt(logs[p], "unit");
+					units.push(logUnit);
+					instance.Logs.push({date: getAt(logs[p], "date"), unit: logUnit, load: logLoad});
+				}
+				instance.Logs = instance.Logs.sort(function(a,b){
+				if(Date.parse(a.date) > Date.parse(b.date)) return 1;
+				return -1});
+				allLogs.push(instance);
+			}
+			
+		}
+		let mostUsedUnit = getMostUsedUnit(units);
+		
+		for(let j = 0; j < allLogs.length;j++){
+			let initial = 0.0;
+			let peak = allLogs[j].Highest;
+			let last = 0.0;
+			for(let k = 0; k < allLogs[j].Logs.length; k++){
+				if(k == 0){
+					initial = convertToUnit(allLogs[j].Logs[k].load, allLogs[j].Logs[k].unit, mostUsedUnit);
+					sumFirst += convertToUnit(allLogs[j].Logs[k].load, allLogs[j].Logs[k].unit, mostUsedUnit);
+				}
+				if(k == allLogs[j].Logs.length-1){
+					last = convertToUnit(allLogs[j].Logs[k].load, allLogs[j].Logs[k].unit, mostUsedUnit);
+					sumLast += convertToUnit(allLogs[j].Logs[k].load, allLogs[j].Logs[k].unit, mostUsedUnit);
+				}
+			}
+			let greyLineClass = (j % 2 === 0) ? "grayLine" : "";
+			let movement = wrapContent("div", allLogs[j].Name, ["m-2", "text-center", "col"]);
+			let initialDiv = wrapContent("div", initial + " " + mostUsedUnit + "s", ["m-2", "text-center", "col"]);
+			let peakDiv = wrapContent("div", peak + " " + mostUsedUnit + "s", ["m-2", "text-center", "col"]);
+			let lastDiv = wrapContent("div", last + " " + mostUsedUnit + "s", ["m-2", "text-center", "col"]);
+			let row = wrapContent("div", movement+ initialDiv + peakDiv + lastDiv, [greyLineClass,"m-2", "text-center", "row"]);
+			addToDiv(increases[i], row, "last");
+		}
+		let sumFirstDiv = wrapContent("div", "Total Initial " + mostUsedUnit + "s : "+ sumFirst , ["m-2", "text-center", "col"]);
+		let sumLastDiv = wrapContent("div", "Total Final " + mostUsedUnit + "s : "+ sumLast , ["m-2", "text-center", "col"]);
+		let sumRow = wrapContent("div", sumFirstDiv + sumLastDiv, ["bg-dark", "text-light","m-2", "text-center", "row"]);
+		addToDiv(increases[i], sumRow, "last");
+		console.log(allLogs);
+		console.log("Total First: "+ sumFirst);
+		console.log("Total Last: "+ sumLast);
+    
+	}
+}
+
+function convertToUnit(value, unitInitial, unitResult){
+	unitInitial = normalizeUnit(unitInitial);
+	unitResult = normalizeUnit(unitResult);
+	if(unitInitial == unitResult) return value;
+	if(unitResult == "kg" || unitResult == "lb"){
+		if(unitResult == "kg" && unitInitial == "lb"){
+			return value * 0.453;
+		}
+		if(unitResult == "lb" && unitInitial == "kg"){
+			return value * 2.2;
+		}
+		return 0;
+	}
+	if(unitResult == "sec" || unitResult == "min" || unitResult == "hr"){
+		
+		if(unitInitial == "hr") value = (value/60)/60;
+		if(unitInitial == "min") value = (value/60);
+		
+		if(unitResult == "min") return value*60;
+		if(unitResult == "hr") return value*60*60;
+		if(unitResult == "sec") return value;
+			
+		return 0;
+	}
+	if(unitResult.toLowerCase() == "bw") return 0;
+	
+}
+
+function getMostUsedUnit(units){
+	let scoreboard = {};
+	for(let i = 0; i < units.length;i++){
+		unit = normalizeUnit(units[i]);
+		if(acceptedUnits.includes(unit)){
+			if(scoreboard[unit] == undefined) scoreboard[unit] = 1;
+			scoreboard[unit]++;
+		}
+	}
+	let Highest = 0;
+	let ChosenUnit = "";
+	Object.keys(scoreboard).forEach(function(key,index) {
+		if(scoreboard[key] >= Highest){
+			Highest = scoreboard[key];
+			ChosenUnit = key;
+		}
+	});
+	
+	return ChosenUnit;
+}
+
+function normalizeUnit(unit){
+	unit = unit.toLowerCase();
+	if(unit.endsWith("s")) unit = unit.substring(0, unit.length-1);
+	if(unit == "second") return "sec";
+	if(unit == "hour") return "hr";
+	if(unit == "minute") return "min";
+	if(unit == "kilo") return "kg";
+	if(unit == "pound") return "lb";
+	if(unit == "bodyweight") return "bw";
+	return unit;
+}
+
+function parseWeight(load){
+	if(load.includes("+") || load.includes("-")){
+		let sum = load.split("+").join("-").split("-");
+		let result = parseFloat(sum[0]);
+		for(let i = 1; i < sum.length;i++){
+			if(load.includes("+")){
+				result += parseFloat(sum[i]);
+			}else{
+				result -= parseFloat(sum[i]);
+			}
+		}
+		load = result+"";
+	}
+	let parse = parseFloat(load);
+	if(isNaN(parse)) return 0.0;
+	return parse;
 }
 
 function getAt(el, attribute, type){
