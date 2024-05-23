@@ -153,7 +153,8 @@ function BuildStats(){
 			let initialDivHeader = wrapContent("div", "Initial", ["m-2", "text-center", "col"]);
 			let peakDivHeader = wrapContent("div", "Peak", ["m-2", "text-center", "col"]);
 			let lastDivHeader = wrapContent("div", "Most Recent", ["m-2", "text-center", "col"]);
-			let rowHeader = wrapContent("div", movementHeader+ initialDivHeader + peakDivHeader + lastDivHeader, ["m-2", "bg-dark", "text-light", "text-center", "row"]);
+			let differenceDivHeader = wrapContent("div", "Difference", ["m-2", "text-center", "col"]);
+			let rowHeader = wrapContent("div", movementHeader+ initialDivHeader + peakDivHeader + lastDivHeader + differenceDivHeader, ["m-2", "bg-dark", "text-light", "text-center", "row"]);
 			addToDiv(increases[i], rowHeader, "last");
 		
 		let exercises = document.getElementsByTagName("exercise");
@@ -163,12 +164,22 @@ function BuildStats(){
 			for(let k = 0; k < sets.length; k++){
 				let nameAppend = "";
 				if(k > 0) nameAppend = " "+(k+1);
-				let instance = {Name: getAt(exercises[j], "name") + nameAppend, Logs: [], Highest: 0.0, Lowest: 9000000000};
+				let instance = {
+									Name: getAt(exercises[j], "name") + nameAppend ,
+									Multiplier: getSetVolumeMultiplier(sets[k]),
+									Logs: [], 
+									Highest: 0.0, 
+									Lowest: 9000000000,
+									RepIncrease: false
+								};
+				let programmedVolume = getRepSum(buildRepString(undefined, sets[k]))
 				let logs = sets[k].getElementsByTagName("log");
 				for(let p = 0; p < logs.length; p++){
+					instance.RepIncrease = false;
 					let logLoad = parseWeight(getAt(logs[p], "load"));
 					if(logLoad > instance.Highest) instance.Highest = logLoad;
 					if(logLoad < instance.Lowest) instance.Lowest = logLoad;
+					if(programmedVolume < getRepSum(getAt(logs[p], "reps"))) instance.RepIncrease = true;
 					let logUnit = getAt(logs[p], "unit");
 					units.push(logUnit);
 					instance.Logs.push({date: getAt(logs[p], "date"), unit: logUnit, load: logLoad});
@@ -190,32 +201,44 @@ function BuildStats(){
 			for(let k = 0; k < allLogs[j].Logs.length; k++){
 				if(k == 0){
 					initial = convertToUnit(allLogs[j].Logs[k].load, allLogs[j].Logs[k].unit, mostUsedUnit);
-					sumFirst += convertToUnit(allLogs[j].Logs[k].load, allLogs[j].Logs[k].unit, mostUsedUnit);
+					sumFirst += convertToUnit(allLogs[j].Logs[k].load, allLogs[j].Logs[k].unit, mostUsedUnit) * allLogs[j].Multiplier;
 				}
 				if(k == allLogs[j].Logs.length-1){
 					last = convertToUnit(allLogs[j].Logs[k].load, allLogs[j].Logs[k].unit, mostUsedUnit);
-					sumLast += convertToUnit(allLogs[j].Logs[k].load, allLogs[j].Logs[k].unit, mostUsedUnit);
+					sumLast += convertToUnit(allLogs[j].Logs[k].load, allLogs[j].Logs[k].unit, mostUsedUnit) * allLogs[j].Multiplier;
 				}
 			}
 			let greyLineClass = (j % 2 === 0) ? "grayLine" : "";
 			let wariningClass = (peak > last) ? "text-warning": "";
+			let moreVolumeSignifier = (allLogs[j].RepIncrease) ? " + volume" : "" ;
 			let movement = wrapContent("small", allLogs[j].Name, ["m-2", "text-center", "col"]);
-			let initialDiv = wrapContent("div", initial + " " + mostUsedUnit + "s", ["m-2", "text-center", "col"]);
-			let peakDiv = wrapContent("div", peak + " " + mostUsedUnit + "s", ["m-2", "text-center", "col"]);
-			let lastDiv = wrapContent("div", last + " " + mostUsedUnit + "s", [wariningClass, "m-2", "text-center", "col"]);
-			let row = wrapContent("div", movement+ initialDiv + peakDiv + lastDiv, [greyLineClass,"m-2", "text-center", "row"]);
+			let initialDiv = wrapContent("small", initial + " " + mostUsedUnit + "s", ["m-2", "text-center", "col"]);
+			let peakDiv = wrapContent("small", peak + " " + mostUsedUnit + "s", ["m-2", "text-center", "col"]);
+			let lastDiv = wrapContent("small", last + " " + mostUsedUnit + "s", [wariningClass, "m-2", "text-center", "col"]);
+			let differenceDiv = wrapContent("small", (last - initial) + " " + mostUsedUnit + "s" + moreVolumeSignifier, [wariningClass, "m-2", "text-center", "col"]);
+			let row = wrapContent("div", movement+ initialDiv + peakDiv + lastDiv + differenceDiv, [greyLineClass,"m-2", "text-center", "row"]);
 			addToDiv(increases[i], row, "last");
 		}
 		let wariningClass = (sumFirst > sumLast) ? "text-warning": "";
 		let sumFirstDiv = wrapContent("div", "Total Initial: " + sumFirst + " " + mostUsedUnit, ["m-2", "text-center", "col"]);
 		let sumLastDiv = wrapContent("div", "Total Final: " + sumLast + " " + mostUsedUnit, [wariningClass, "m-2", "text-center", "col"]);
-		let sumRow = wrapContent("div", sumFirstDiv + sumLastDiv, ["bg-dark", "text-light","m-2", "text-center", "row"]);
+		let differenceDiv = wrapContent("div", "Difference: " + (sumLast - sumFirst) + " " + mostUsedUnit, [wariningClass, "m-2", "text-center", "col"]);
+		let sumRow = wrapContent("div", sumFirstDiv + sumLastDiv + differenceDiv, ["bg-dark", "text-light","m-2", "text-center", "row"]);
 		addToDiv(increases[i], sumRow, "last");
 		console.log(allLogs);
 		console.log("Total First: "+ sumFirst);
 		console.log("Total Last: "+ sumLast);
     
 	}
+}
+
+function getRepSum(reps){
+	let repArr = getArrayFrom(reps);
+	let sum = 0;
+	for(let i = 0; i < repArr.length; i++){
+		sum += parseFloat(repArr[i]);
+	}
+	return sum;
 }
 
 function convertToUnit(value, unitInitial, unitResult){
@@ -512,6 +535,15 @@ function buildRepString(log, set){
 	}
 	return repsStr;
 	}catch{ return ""}
+}
+function getSetVolumeMultiplier(set){
+	
+	let setNumber = parseFloat(getAt(set,"amount"));
+	let setProgrammedReps = parseFloat(getAt(set,"reps"));
+	if(isNaN(setNumber)) setNumber = 1;
+	if(isNaN(setProgrammedReps)) setProgrammedReps = 1;
+	
+	return setNumber*setProgrammedReps;
 }
 
 function wrapContent(tag, content, classes, id, custonAttributes){
