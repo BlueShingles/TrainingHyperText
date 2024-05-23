@@ -2,7 +2,7 @@ let separators = ["/","|",",",";","_"]
 
 let acceptedUnits = ["kilo","kg","lb","bodyweight","bw","pound","second","sec","minute","min","hour","hr"];
 
-let pageSource = "";
+let pageSource = {};
 
 let pageAlterNumber = 0;
 
@@ -69,7 +69,7 @@ function BuildDays(){
 		addTags(days[i]);
 		addToDiv(days[i], title, "first");
 		addTooltip(days[i]);
-		addCollapse(days[i], ("exercises_of_" + i), "92%", "0px");
+		addCollapse(days[i], ("exercises_of_" + i), "91%", "0px");
 	}
 }
 
@@ -186,6 +186,7 @@ function BuildStats(){
 			let initial = 0.0;
 			let peak = allLogs[j].Highest;
 			let last = 0.0;
+			
 			for(let k = 0; k < allLogs[j].Logs.length; k++){
 				if(k == 0){
 					initial = convertToUnit(allLogs[j].Logs[k].load, allLogs[j].Logs[k].unit, mostUsedUnit);
@@ -197,15 +198,17 @@ function BuildStats(){
 				}
 			}
 			let greyLineClass = (j % 2 === 0) ? "grayLine" : "";
-			let movement = wrapContent("div", allLogs[j].Name, ["m-2", "text-center", "col"]);
+			let wariningClass = (peak > last) ? "text-warning": "";
+			let movement = wrapContent("small", allLogs[j].Name, ["m-2", "text-center", "col"]);
 			let initialDiv = wrapContent("div", initial + " " + mostUsedUnit + "s", ["m-2", "text-center", "col"]);
 			let peakDiv = wrapContent("div", peak + " " + mostUsedUnit + "s", ["m-2", "text-center", "col"]);
-			let lastDiv = wrapContent("div", last + " " + mostUsedUnit + "s", ["m-2", "text-center", "col"]);
+			let lastDiv = wrapContent("div", last + " " + mostUsedUnit + "s", [wariningClass, "m-2", "text-center", "col"]);
 			let row = wrapContent("div", movement+ initialDiv + peakDiv + lastDiv, [greyLineClass,"m-2", "text-center", "row"]);
 			addToDiv(increases[i], row, "last");
 		}
+		let wariningClass = (sumFirst > sumLast) ? "text-warning": "";
 		let sumFirstDiv = wrapContent("div", "Total Initial: " + sumFirst + " " + mostUsedUnit, ["m-2", "text-center", "col"]);
-		let sumLastDiv = wrapContent("div", "Total Final: " + sumLast + " " + mostUsedUnit, ["m-2", "text-center", "col"]);
+		let sumLastDiv = wrapContent("div", "Total Final: " + sumLast + " " + mostUsedUnit, [wariningClass, "m-2", "text-center", "col"]);
 		let sumRow = wrapContent("div", sumFirstDiv + sumLastDiv, ["bg-dark", "text-light","m-2", "text-center", "row"]);
 		addToDiv(increases[i], sumRow, "last");
 		console.log(allLogs);
@@ -306,7 +309,7 @@ function getAt(el, attribute, type){
 }
 
 function copyPageCode(){
-	navigator.clipboard.writeText(unescape(removeLogEnds(pageSource)));
+	navigator.clipboard.writeText(unescape(removeLogEnds(pageSource[pageAlterNumber+""])));
 	if(pageAlterNumber == 0){
 		Swal.fire({
 			title: "There is no change in the source text",
@@ -431,16 +434,17 @@ function createLog(divisorNum){
 		repsStr = `reps="`+ reps +`"`; 
 	}
 	
-	pageAlterNumber++;
 		
-	let newSourceArray = pageSource.split(divisor);
+	let newSourceArray = pageSource[pageAlterNumber+""].split(divisor);
+	
+	pageAlterNumber++;
 	
 	newSourceArray[0] += `<log date="` + getStringOfDateNow() +`" `+ repsStr +` load="`+ weight +`" unit="`+ unit +`" toolTip="`+ extra +`"></log>`;
 	let newSource = newSourceArray.join(divisor);
 	newSource = removeLogEnds(newSource);
-	pageSource = newSource;
 	updatePageText(newSource);
 	createLogEnds();
+	pageSource[pageAlterNumber+""] = getPageText();
 	addLogForms();
     BuildTemplate();
 	collapseDiv(undefined, "logs_of_" + divisorNum);
@@ -577,9 +581,9 @@ function format(html) {
     return result.substring(1, result.length-3);
 }
 
- document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener("DOMContentLoaded", (event) => {
 	createLogEnds();
-	pageSource = getPageText();
+	pageSource[pageAlterNumber+""] = getPageText();
 	addLogForms();
-    BuildTemplate();
-  });
+	BuildTemplate();
+});
