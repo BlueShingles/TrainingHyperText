@@ -14,19 +14,32 @@ let saveButton = `<div class="row m-1 p-2">
 					</div>`;
 
 function BuildTemplate(){
-	if(isMobile()){
-		document.body.style.zoom = "160%";
-	}
+
 	BuildPreProgram();
 	BuildPrograms();
 	BuildDays();
 	BuildExercises();
 	BuildSets();
 	BuildStats();
-	
+	RunMobileModifiers();
 	$(function () {
 	  $('[data-toggle="tooltip"]').tooltip()
 	})
+	
+}
+
+function RunMobileModifiers(){
+	if(isMobile()){
+		document.body.style.zoom = "160%";
+			let programs = document.getElementsByTagName("program");
+			for(let i = 0; i < programs.length; i++){
+				programs[i].style.width = "900px";
+			}
+			let stats = document.getElementsByTagName("stats");
+			for(let i = 0; i < stats.length; i++){
+				stats[i].style.width = "1100px";
+			}
+	}
 }
 
 function isMobile() {

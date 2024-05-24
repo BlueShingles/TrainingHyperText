@@ -17,12 +17,6 @@ program{
 	 height: 30px;
 	 text-align: center;
 }
-program {
-	min-width: 600px;
-}
-stats {
-	min-width: 910px;
-}
 program .row{
 	min-width: 550px;
 }
