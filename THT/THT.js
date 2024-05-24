@@ -37,7 +37,7 @@ function RunMobileModifiers(){
 			}
 			let stats = document.getElementsByTagName("stats");
 			for(let i = 0; i < stats.length; i++){
-				stats[i].setAttribute("style", "width: 900px !important; margin-left: 0px !important; margin-right: 0px!important;");
+				stats[i].setAttribute("style", "width: 900px !important; margin-left: 0px !important; margin-right: 0px!important; padding: 0px !important;");
 			}
 	}
 }
@@ -146,14 +146,17 @@ function BuildStats(){
 	let stats = document.getElementsByTagName("stats");
 	
 	for(let i = 0; i < stats.length; i++){
-		toggleClasses(stats[i], ["card","bg-info","p-2", "ml-5","mr-5","mb-5","mt-2","rounded"]);
+		toggleClasses(stats[i], ["card","bg-info","p-2", "ml-5","mr-5", "pl-5","pr-5","mb-5","mt-2","rounded"]);
 		let title = wrapContent("h5", "Analytics", ["m-2", "text-light"]);
+		let wrappedPanels = wrapContent("div", stats[i].innerHTML, ["wrapper"],("panels_of_" + i));
+		addToDiv(stats[i], wrappedPanels)
+		addCollapse(stats[i], ("panels_of_" + i), "91%", "0px");
 		addToDiv(stats[i], title, "first");
 	}
 	
 	let increases = document.getElementsByTagName("WeightIncreases");
 	for(let i = 0; i < increases.length; i++){
-		toggleClasses(increases[i], ["card","bg-light","wrapper","p-2","ml-5","mr-5","mb-5","mt-2","rounded"]);
+		toggleClasses(increases[i], ["card","bg-light","wrapper","p-2","mb-5","mt-2","rounded"]);
 		
 		let allLogs = [];
 		let units = [];
