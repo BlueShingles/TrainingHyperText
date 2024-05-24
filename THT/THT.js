@@ -422,20 +422,20 @@ function addLogForms(){
 		
 		let setPlaceholderString = buildRepString(undefined, document.getElementsByTagName("set")[i]);
 
-		let addUnitCols = wrapContent("input", "", ["m-2", "mt-4","col-2", "mt-3"], "unitInput_of_"+i, [{key:"placeholder", value:"Unit: kg, lbs, seconds etc..."}]);
+		let addUnitCols = wrapContent("input", "", ["m-2", "mt-4","col", "mt-3"], "unitInput_of_"+i, [{key:"placeholder", value:"Unit: kg, lbs, seconds etc..."}]);
 		
-		let addWeightCols = wrapContent("input", "", ["m-2", "mt-4","col-2"	], "weightInput_of_"+i, [{key:"placeholder",value:"Load"}]);
+		let addWeightCols = wrapContent("input", "", ["m-2", "mt-4","col"	], "weightInput_of_"+i, [{key:"placeholder",value:"Load"}]);
 		
-		let addExtraCols = wrapContent("input", "", ["m-2", "mt-4","col-2", "mt-3"], "extraInput_of_"+i, [{key:"placeholder",value:"Extra Info"}]);
+		let addExtraCols = wrapContent("input", "", ["m-2", "mt-4","col", "mt-3"], "extraInput_of_"+i, [{key:"placeholder",value:"Extra Info"}]);
 		
-		let addRepsCols = wrapContent("input", "", ["m-2", "mt-4", "col-2", "mt-3"], "repsInput_of_"+i, [{key:"placeholder",value:setPlaceholderString}]);
+		let addRepsCols = wrapContent("input", "", ["m-2", "mt-4", "col", "mt-3"], "repsInput_of_"+i, [{key:"placeholder",value:setPlaceholderString}]);
 		
 				
-		let addButton = wrapContent("div", "Add", ["btn", "btn-success", "m-2", "col-8"],"button_of_" + i, [{key:"onclick", value:"createLog("+ i +")"}]);
+		let addButton = wrapContent("div", "Add", ["btn", "btn-success", "m-2", "col-12"],"button_of_" + i, [{key:"onclick", value:"createLog("+ i +")"}]);
 		let addButtonCol = wrapContent("div", addButton, ["row", "m-2", "mt-4"]);
 		
-		let tableInner = wrapContent("div", addExtraCols + addRepsCols + addWeightCols + addUnitCols + addButtonCol, ["row m-2 p-3"]);
-		let tableOuter = wrapContent("div", tableInner, ["col", "text-center"]);
+		let tableInner = wrapContent("div", addExtraCols + addRepsCols + addWeightCols + addUnitCols , ["row m-2 p-3"]);
+		let tableOuter = wrapContent("div", tableInner + addButtonCol, ["col", "text-center"]);
 
 		addToDiv(logEnds[i], tableOuter, "outsideFirst", "log_form_of" + i);
 	}
