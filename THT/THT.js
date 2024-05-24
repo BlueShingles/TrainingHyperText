@@ -140,7 +140,7 @@ function BuildStats(){
 	
 	let increases = document.getElementsByTagName("WeightIncreases");
 	for(let i = 0; i < increases.length; i++){
-		toggleClasses(increases[i], ["card","bg-light","p-2","ml-5","mr-5","mb-5","mt-2","rounded"]);
+		toggleClasses(increases[i], ["card","bg-light","wrapper","p-2","ml-5","mr-5","mb-5","mt-2","rounded"]);
 		
 		let allLogs = [];
 		let units = [];
@@ -370,7 +370,7 @@ function addCollapse(el, target, left, top, closed){
 	if(closed == true){
 		icon = "▼";
 	}		
-	addToDiv(el, `<div onclick="collapseDiv(this, '`+ target +`')" style="z-index: 999;margin-left: `+left+`; margin-top: `+top+`; position: absolute" class="pointer">`+ icon +`</div>`, "first");
+	addToDiv(el, `<div onclick="collapseDiv(this, '`+ target +`')" style="z-index: 999;" class="pointer float-right">`+ icon +`</div>`, "first");
 	if(closed == true){
 		try{
 			collapseDiv(null, target);

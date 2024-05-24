@@ -4,6 +4,9 @@ input{
 day{
 	background: rgb(94,94,94);
 }
+.row{
+	min-width: 500px;
+}
 .pointer{
 	cursor: pointer;
 }
