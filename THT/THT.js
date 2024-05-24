@@ -370,7 +370,7 @@ function addCollapse(el, target, left, top, closed){
 	if(closed == true){
 		icon = "▼";
 	}		
-	addToDiv(el, `<div onclick="collapseDiv(this, '`+ target +`')" style="z-index: 999;" class="pointer float-right">`+ icon +`</div>`, "first");
+	addToDiv(el, `<div class="row m-2"><div onclick="collapseDiv(this, '`+ target +`')" style="z-index: 999;" class=" col-12 pl-5 pr-5 pointer toggleCollapse">`+ icon +`</div></div>`, "first");
 	if(closed == true){
 		try{
 			collapseDiv(null, target);
@@ -431,11 +431,11 @@ function addLogForms(){
 		let addRepsCols = wrapContent("input", "", ["m-2", "mt-4", "col-2", "mt-3"], "repsInput_of_"+i, [{key:"placeholder",value:setPlaceholderString}]);
 		
 				
-		let addButton = wrapContent("div", "Add", ["btn", "btn-success", "m-2"],"button_of_" + i, [{key:"onclick", value:"createLog("+ i +")"}]);
-		let addButtonCol = wrapContent("div", addButton, ["col-1", "m-2", "mt-4"]);
+		let addButton = wrapContent("div", "Add", ["btn", "btn-success", "m-2", "col-8"],"button_of_" + i, [{key:"onclick", value:"createLog("+ i +")"}]);
+		let addButtonCol = wrapContent("div", addButton, ["row", "m-2", "mt-4"]);
 		
-		let tableInner = wrapContent("div", addExtraCols + addRepsCols + addWeightCols + addUnitCols + addButtonCol, ["row m-2 p-3 pl-5"]);
-		let tableOuter = wrapContent("div", tableInner, ["col", "ml-5"]);
+		let tableInner = wrapContent("div", addExtraCols + addRepsCols + addWeightCols + addUnitCols + addButtonCol, ["row m-2 p-3"]);
+		let tableOuter = wrapContent("div", tableInner, ["col", "text-center"]);
 
 		addToDiv(logEnds[i], tableOuter, "outsideFirst", "log_form_of" + i);
 	}
