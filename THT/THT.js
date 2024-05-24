@@ -33,7 +33,7 @@ function RunMobileModifiers(){
 		document.body.style.zoom = "160%";
 			let programs = document.getElementsByTagName("program");
 			for(let i = 0; i < programs.length; i++){
-				programs[i].style.width = "900px";
+				programs[i].style.width = "1100px";
 			}
 			let stats = document.getElementsByTagName("stats");
 			for(let i = 0; i < stats.length; i++){
