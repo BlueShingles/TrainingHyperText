@@ -7,8 +7,8 @@ let pageSource = {};
 let pageAlterNumber = 0;
 
 let saveButton = `<div class="row m-1 p-2">
-					<div class="col-7"></div>
-					<div class="col-5">
+					<div class="col-4"></div>
+					<div class="col-8">
 						<div class="m-3 btn btn-success float-right" onclick="copyPageCode();">Copy Page Source</div>
 					</div>
 					</div>`;
@@ -30,7 +30,7 @@ function BuildTemplate(){
 
 function RunMobileModifiers(){
 	if(isMobile()){
-		document.body.style.zoom = "160%";
+		document.body.style.zoom = "190%";
 			let programs = document.getElementsByTagName("program");
 			for(let i = 0; i < programs.length; i++){
 				programs[i].setAttribute("style", "width: 900px !important; margin-left: 0px !important; margin-right: 0px!important;");
