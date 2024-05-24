@@ -162,11 +162,11 @@ function BuildStats(){
 		let sumFirst = 0;
 		let sumLast = 0;
 		
-			let movementHeader = wrapContent("div", "Exercise", ["m-2", "text-center", "col"]);
-			let initialDivHeader = wrapContent("div", "Initial", ["m-2", "text-center", "col"]);
-			let peakDivHeader = wrapContent("div", "Peak", ["m-2", "text-center", "col"]);
-			let lastDivHeader = wrapContent("div", "Most Recent", ["m-2", "text-center", "col"]);
-			let differenceDivHeader = wrapContent("div", "Difference", ["m-2", "text-center", "col"]);
+			let movementHeader = wrapContent("small", "Exercise", ["m-2", "text-center", "col"]);
+			let initialDivHeader = wrapContent("small", "Initial", ["m-2", "text-center", "col"]);
+			let peakDivHeader = wrapContent("small", "Peak", ["m-2", "text-center", "col"]);
+			let lastDivHeader = wrapContent("small", "Most Recent", ["m-2", "text-center", "col"]);
+			let differenceDivHeader = wrapContent("small", "Difference", ["m-2", "text-center", "col"]);
 			let rowHeader = wrapContent("div", movementHeader+ initialDivHeader + peakDivHeader + lastDivHeader + differenceDivHeader, ["m-2", "bg-dark", "text-light", "text-center", "row"]);
 			addToDiv(increases[i], rowHeader, "last");
 		
