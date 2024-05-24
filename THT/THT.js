@@ -31,6 +31,7 @@ function BuildTemplate(){
 function RunMobileModifiers(){
 	if(isMobile()){
 		document.body.style.zoom = "190%";
+		document.body.classList.add("mobile");
 			let programs = document.getElementsByTagName("program");
 			for(let i = 0; i < programs.length; i++){
 				programs[i].setAttribute("style", "width: 900px !important; margin-left: 0px !important; margin-right: 0px!important;");

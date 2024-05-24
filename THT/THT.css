@@ -41,11 +41,14 @@ program{
 	max-height: 0px;
 	overflow: hidden;
 }
-
 body{
 	background: linear-gradient(41deg, #00ffbd, #006bff, #00285f, #8907b0);
-    background-size: 800% 800%;
+	background-size: 800% 800%;
+}
 
+body:not(.mobile){
+	background: linear-gradient(41deg, #00ffbd, #006bff, #00285f, #8907b0);
+	background-size: 800% 800%;
     -webkit-animation: BackAnimation 30s ease infinite;
     -moz-animation: BackAnimation 30s ease infinite;
     animation: BackAnimation 30s ease infinite;
