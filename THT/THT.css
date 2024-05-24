@@ -18,7 +18,7 @@ program{
 	 text-align: center;
 }
 program .row{
-	min-width: 450px;
+	min-width: 550px;
 }
 stats .row{
 	min-width: 900px;
