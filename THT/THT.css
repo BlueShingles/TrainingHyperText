@@ -17,12 +17,6 @@ program{
 	 height: 30px;
 	 text-align: center;
 }
-program .row{
-	min-width: 550px;
-}
-stats .row{
-	min-width: 900px;
-}
 .pointer{
 	cursor: pointer;
 }
