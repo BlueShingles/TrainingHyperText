@@ -33,11 +33,11 @@ function RunMobileModifiers(){
 		document.body.style.zoom = "160%";
 			let programs = document.getElementsByTagName("program");
 			for(let i = 0; i < programs.length; i++){
-				programs[i].style.width = "900px";
+				programs[i].setAttribute("style", "width: 900px !important; margin-left: 0px !important; margin-right: 0px!important;");
 			}
 			let stats = document.getElementsByTagName("stats");
 			for(let i = 0; i < stats.length; i++){
-				stats[i].style.width = "900px";
+				stats[i].setAttribute("style", "width: 900px !important; margin-left: 0px !important; margin-right: 0px!important;");
 			}
 	}
 }
