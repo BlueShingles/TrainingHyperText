@@ -4,8 +4,11 @@ input{
 day{
 	background: rgb(94,94,94);
 }
+.majorWrapper{
+	overflow: scroll;
+}
 .row{
-	min-width: 800px;
+	min-width: 700px;
 }
 .pointer{
 	cursor: pointer;
@@ -17,7 +20,7 @@ day{
 }
 
 .wrapper{
-	max-height: 800px;
+	max-height: 1000px;
 	overflow: scroll;
 	transform-origin: top;
     -webkit-transition: all 0.5s ease-in-out;

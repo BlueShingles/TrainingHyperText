@@ -43,7 +43,7 @@ function BuildPrograms(){
 	let programs = document.getElementsByTagName("program");
 	for(let i = 0; i < programs.length; i++){
 		
-		toggleClasses(programs[i], ["card","bg-dark","text-light","p-2","ml-5","mr-5","mb-5","mt-2","rounded"]);
+		toggleClasses(programs[i], ["card","bg-dark","text-light", "majorWrapper","p-2","ml-5","mr-5","mb-5","mt-2","rounded"]);
 		
 		
 
@@ -133,7 +133,7 @@ function BuildStats(){
 	let stats = document.getElementsByTagName("stats");
 	
 	for(let i = 0; i < stats.length; i++){
-		toggleClasses(stats[i], ["card","bg-info","p-2","ml-5","mr-5","mb-5","mt-2","rounded"]);
+		toggleClasses(stats[i], ["card","bg-info","p-2","majorWrapper","ml-5","mr-5","mb-5","mt-2","rounded"]);
 		let title = wrapContent("h5", "Analytics", ["m-2", "text-light"]);
 		addToDiv(stats[i], title, "first");
 	}
