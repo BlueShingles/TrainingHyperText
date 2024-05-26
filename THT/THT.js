@@ -6,11 +6,8 @@ let pageSource = {};
 
 let pageAlterNumber = 0;
 
-let saveButton = `<div class="row m-1 p-2">
-					<div class="col-4"></div>
-					<div class="col-8">
-						<div class="m-3 btn btn-success float-right" onclick="copyPageCode();">Copy Page Source</div>
-					</div>
+let saveButton = `<div class="row ml-3 mb-1 p-2">
+						<div class="m-3 btn btn-success float-left" onclick="copyPageCode();">Copy Page Source</div>
 					</div>`;
 
 function BuildTemplate(){
@@ -34,6 +31,22 @@ function RunMobileModifiers(){
 		document.body.classList.add("mobile");
 			let programs = document.getElementsByTagName("program");
 			for(let i = 0; i < programs.length; i++){
+				let smalls = programs[i].getElementsByTagName("small");
+				for(let j = 0; j < smalls.length; j++){
+					smalls[j].setAttribute("style", "font-size: 25px !important;");
+				}
+				let setLabels = programs[i].getElementsByClassName("set-label");
+				for(let j = 0; j < setLabels.length; j++){
+					setLabels[j].setAttribute("style", "font-size: 27px !important;");
+				}
+				let h6s = programs[i].getElementsByTagName("h6");
+				for(let j = 0; j < h6s.length; j++){
+					h6s[j].setAttribute("style", "font-size: 35px !important;");
+				}
+				let h5s = programs[i].getElementsByTagName("h5");
+				for(let j = 0; j < h5s.length; j++){
+					h5s[j].setAttribute("style", "font-size: 45px !important;");
+				}
 				programs[i].setAttribute("style", "width: 900px !important; margin-left: 0px !important; margin-right: 0px!important;");
 			}
 			let stats = document.getElementsByTagName("stats");
@@ -92,7 +105,7 @@ function BuildExercises(){
 	for(let i = 0; i < exercises.length; i++){
 		toggleClasses(exercises[i], ["card","bg-light","text-dark","p-2","m-1","rounded"]);
 		let description = wrapContent("small", getAt(exercises[i], "description"), ["text-muted", "font-weight-light"]);
-		let innerTitle = wrapContent("div", getAt(exercises[i], "name") + addSpace(5) + description, ["font-weight-bold", "float-left", "ml-2", "col-12"]);
+		let innerTitle = wrapContent("div", getAt(exercises[i], "name") + addSpace(5) + description, ["font-weight-bold", "set-label", "float-left", "ml-2", "col-12"]);
 		let title = wrapContent("div", innerTitle, ["row"]);
 		addTags(exercises[i]);
 		addToDiv(exercises[i], title, "first");
@@ -114,8 +127,8 @@ function BuildSets(){
 		addToDiv(sets[j], wrappedLogs)
 		
 		addTooltip(sets[j]);
-		let description = wrapContent("small", getAt(sets[j], "description"), ["text-muted", "font-weight-light"]);
-		let innerTitle = wrapContent("div", setNumber + "x" + setProgrammedReps + addSpace(5) + description, ["font-italic", "float-left", "ml-2", "col-12"]);
+		let description = wrapContent("small", getAt(sets[j], "description"), ["font-italic", "text-muted", "font-weight-light"]);
+		let innerTitle = wrapContent("div", setNumber + "x" + setProgrammedReps + addSpace(5) + description, ["float-left", "set-label", "ml-2", "col-12"]);
 		let title = wrapContent("div", innerTitle, ["row"]);
 		addCollapse(sets[j], ("logs_of_" + j), "94%", "-20px", true);
 		addToDiv(sets[j], title, "first");
