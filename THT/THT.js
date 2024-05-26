@@ -33,6 +33,7 @@ function RunMobileModifiers(){
 			for(let i = 0; i < programs.length; i++){
 				let smalls = programs[i].getElementsByTagName("small");
 				for(let j = 0; j < smalls.length; j++){
+					if(smalls[j].classList.contains("unit")) continue;
 					smalls[j].setAttribute("style", "font-size: 25px !important;");
 				}
 				let setLabels = programs[i].getElementsByClassName("set-label");
@@ -144,7 +145,7 @@ function BuildSets(){
 			let dateInner = wrapContent("div", getAt(logs[i], "date") + ` - ` + getWeekDay(getAt(logs[i], "date")));
 			let dateOuter = wrapContent("div", dateInner, ["col", `text-center`]);
 			
-			let unit = wrapContent("small", getAt(logs[i], "unit"));
+			let unit = wrapContent("small", getAt(logs[i], "unit"), ["unit"]);
 			let fullLoad = wrapContent("div", getAt(logs[i], "load") + ` ` + unit, ["col", `text-center`]);
 			
 			let tableInner = wrapContent("div", dateOuter + repsOuter + fullLoad, ["row m-2 p-2"]);
