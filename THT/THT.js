@@ -192,9 +192,12 @@ function BuildStats(){
 	
 		for(let j = 0; j < exercises.length; j++){
 			let sets = exercises[j].getElementsByTagName("set");
+			let hasMoreSets = (sets.length > 1);
 			for(let k = 0; k < sets.length; k++){
 				let nameAppend = "";
-				if(k > 0) nameAppend = " "+(k+1);
+				let description = getAt(sets[k], "description");
+				if(hasMoreSets && description != "") nameAppend = " " + description
+				if(hasMoreSets && description == "") nameAppend = " " + (k + 1);
 				let instance = {
 									Name: getAt(exercises[j], "name") + nameAppend ,
 									Multiplier: getSetVolumeMultiplier(sets[k]),
@@ -363,7 +366,7 @@ function getAt(el, attribute, type){
 }
 
 function copyPageCode(){
-	navigator.clipboard.writeText(unescape(removeLogEnds(pageSource[pageAlterNumber+""])));
+	navigator.clipboard.writeText(unescape(removeLogEnds(pageSource[pageAlterNumber+""], true)));
 	if(pageAlterNumber == 0){
 		Swal.fire({
 			title: "There is no change in the source text",
@@ -413,13 +416,13 @@ function getWeekDay(dateStr){
 	let date = new Date(dateStr);
 	if(date == `Invalid Date`) return ``;
 	let weekNum = date.getDay();
-	if(weekNum == 0) return `Sunday`;
-	if(weekNum == 1) return `Monday`;
-	if(weekNum == 2) return `Tuesday`;
-	if(weekNum == 3) return `Wednesday`;
-	if(weekNum == 4) return `Thursday`;
-	if(weekNum == 5) return `Friday`;
-	if(weekNum == 6) return `Saturday`;
+	if(weekNum == 0) return `Monday`;
+	if(weekNum == 1) return `Tuesday`;
+	if(weekNum == 2) return `Wednesday`;
+	if(weekNum == 3) return `Thursday`;
+	if(weekNum == 4) return `Friday`;
+	if(weekNum == 5) return `Saturday`;
+    if(weekNum == 5) return `Sunday`;
 }
 
 function collapseDiv(btn, target){
@@ -513,14 +516,15 @@ function getTagOfDiv(str){
 	return str.split("<").join("").split(" ").join("").split(">")[0];
 }
 
-function removeLogEnds(txt){
+function removeLogEnds(txt, removeStyles){
 	let sets = document.getElementsByTagName("set");
 	for(let j = 0; j < sets.length; j++){
 		let removeStr = `<logend id="logend_of_`+ j +`" class=""></logend>`
 		console.log(removeStr);
 		txt = txt.split(removeStr).join("");
 	}
-	return txt;
+	if(removeStyles === true) return txt.split("<style>")[0] + txt.split("</style>")[txt.split("</style>").length-1];
+	return txt; 
 }
 
 function buildProgramTimeCounter(program){
