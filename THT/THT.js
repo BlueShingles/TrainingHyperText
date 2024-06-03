@@ -516,15 +516,48 @@ function getTagOfDiv(str){
 	return str.split("<").join("").split(" ").join("").split(">")[0];
 }
 
-function removeLogEnds(txt, removeStyles){
+function removeLogEnds(txt, cleanHtml){
 	let sets = document.getElementsByTagName("set");
 	for(let j = 0; j < sets.length; j++){
 		let removeStr = `<logend id="logend_of_`+ j +`" class=""></logend>`
 		console.log(removeStr);
 		txt = txt.split(removeStr).join("");
 	}
-	if(removeStyles === true) return txt.split("<style>")[0] + txt.split("</style>")[txt.split("</style>").length-1];
+	if(cleanHtml === true) return cleanHtmlString(txt);
 	return txt; 
+}
+
+function removeStyle(str){
+	return str.replaceAll(/<style.*?>(.|\n|\r)*?<\/style>/ig,'');
+}
+
+function removeScript(str){
+	return str.replaceAll(/<script.*?>(.|\n|\r)*?<\/script>/ig,'');
+}
+
+function cleanHtmlString(str){
+	str = removeStyle(str);
+	
+	var strArr = str.split("<body");
+	strArr[1] = removeScript(strArr[1]);
+	str = strArr.join("<body");
+	
+	str = str.split("<").join("\n<");
+	
+	strArr = str.split("\n");
+	
+	var level = 0;
+	str = "";
+	for(let i = 0; i < strArr.length;i++){
+		strArr[i] = strArr[i].trim();
+		if(strArr[i] == "") continue;
+		if(strArr[i].includes("</")) level--;
+		str += addSpace(level, "   ") + strArr[i] + "\n";
+		if(!strArr[i].includes("</") && !strArr[i].includes("<!--") && !strArr[i].includes("<link") && !strArr[i].includes("<meta") && strArr[i].startsWith("<")) level++
+		if(level < 0) level = 0;
+	}
+	
+	return str;
 }
 
 function buildProgramTimeCounter(program){
@@ -547,10 +580,11 @@ function buildProgramTimeCounter(program){
 	return result;
 }
 
-function addSpace(num){
+function addSpace(num, character){
+	if(character == undefined) character = "&nbsp";
 	let result = ""
 	for(let i = 0; i < num; i++){
-		result += "&nbsp";
+		result += character;
 	}
 	return result;
 }
