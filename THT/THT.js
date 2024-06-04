@@ -172,6 +172,8 @@ function BuildStats(){
 	let increases = document.getElementsByTagName("WeightIncreases");
 	for(let i = 0; i < increases.length; i++){
 		toggleClasses(increases[i], ["card","bg-light","wrapper","p-2","mb-5","mt-2","rounded"]);
+		let title = wrapContent("h6", "Load Change", ["m-2", "text-dark"]);
+		addToDiv(increases[i], title, "first");
 		
 		let allLogs = [];
 		let units = [];
@@ -253,10 +255,12 @@ function BuildStats(){
 			let row = wrapContent("div", movement+ initialDiv + peakDiv + lastDiv + differenceDiv, [greyLineClass,"m-2", "text-center", "row"]);
 			addToDiv(increases[i], row, "last");
 		}
-		let wariningClass = (sumFirst > sumLast) ? "text-warning": "";
+		let wariningClass = (sumFirst > sumLast) ? "text-warning": "text-success";
 		let sumFirstDiv = wrapContent("div", "Total Initial: " + sumFirst + " " + mostUsedUnit, ["m-2", "text-center", "col"]);
-		let sumLastDiv = wrapContent("div", "Total Final: " + sumLast + " " + mostUsedUnit, [wariningClass, "m-2", "text-center", "col"]);
-		let differenceDiv = wrapContent("div", "Difference: " + (sumLast - sumFirst) + " " + mostUsedUnit, [wariningClass, "m-2", "text-center", "col"]);
+		let sumLastDiv = wrapContent("div", "Total Final: " + sumLast + " " + mostUsedUnit, ["m-2", "text-center", "col"]);
+		let percentDifference = (((sumLast-sumFirst)/sumFirst) * 100).toFixed(1);
+		let sign = (percentDifference > 0) ? "+" : "";
+		let differenceDiv = wrapContent("div", "Difference: "+ sign + percentDifference + "%", [wariningClass, "m-2", "text-center", "col"]);
 		let sumRow = wrapContent("div", sumFirstDiv + sumLastDiv + differenceDiv, ["bg-dark", "text-light","m-2", "text-center", "row"]);
 		addToDiv(increases[i], sumRow, "last");
 		console.log(allLogs);
@@ -422,7 +426,7 @@ function getWeekDay(dateStr){
 	if(weekNum == 3) return `Thursday`;
 	if(weekNum == 4) return `Friday`;
 	if(weekNum == 5) return `Saturday`;
-    if(weekNum == 5) return `Sunday`;
+    if(weekNum == 6) return `Sunday`;
 }
 
 function collapseDiv(btn, target){
