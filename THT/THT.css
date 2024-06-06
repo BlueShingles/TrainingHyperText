@@ -7,6 +7,11 @@ day{
 program{
 	overflow: scroll;
 }
+.tooltipIcon{
+	border: 0px;
+	background-color: transparent;
+	width: 10px;
+}
 .toggleCollapse{
 	 border-top-style: none;
      border-right-style: none;
