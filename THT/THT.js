@@ -169,7 +169,7 @@ function BuildStats(){
 		addToDiv(stats[i], title, "first");
 	}
 	
-	let increases = document.getElementsByTagName("WeightIncreases");
+	let increases = document.getElementsByTagName("VolumeIncreases");
 	for(let i = 0; i < increases.length; i++){
 		toggleClasses(increases[i], ["card","bg-light","wrapper","p-2","mb-5","mt-2","rounded"]);
 		let title = wrapContent("h6", "Load Change", ["m-2", "text-dark"]);
@@ -659,7 +659,7 @@ function addToDiv(el, content, placement){
 function addTooltip(el){
 	let tooltip = getAt(el,"toolTip");
 	if(tooltip == "") return;
-	let tooltipInner = `<button class="tooltipIcon text-semi-muted m-1 mr-3" data-toggle="tooltip" data-placement="top" title="`+ tooltip +`">🛈</button>` 
+	let tooltipInner = `<button class="tooltipIcon m-1 mr-3" data-toggle="tooltip" data-placement="top" title="`+ tooltip +`">i</button>` 
 	let tooltipIcon = wrapContent("div", tooltipInner, ["m-0", "float-right", "p-0"], "tooltipOf_"+el.id, [{key:"style", value:"float:right;"}]);
 	let tooltipRow =  wrapContent("div", tooltipIcon, ["w-100"], "tooltipWrapperOf_"+el.id, [{key:"style", value:"height:20px;"}]);
 	addToDiv(el, tooltipRow, "first");

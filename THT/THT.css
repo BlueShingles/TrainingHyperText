@@ -9,8 +9,12 @@ program{
 }
 .tooltipIcon{
 	border: 0px;
-	background-color: transparent;
-	width: 10px;
+	background-color: #0a2f69;
+	color: white;
+	border-radius: 3px;
+	font-size: 10px;
+	font-weight: bold;
+	width: 20px;
 }
 .toggleCollapse{
 	 border-top-style: none;
