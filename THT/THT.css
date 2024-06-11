@@ -16,6 +16,9 @@ program{
 	font-weight: bold;
 	width: 20px;
 }
+.bigText{
+	font-size: 30px;
+}
 .toggleCollapse{
 	 border-top-style: none;
      border-right-style: none;

@@ -157,17 +157,7 @@ function BuildSets(){
 	}
 }
 
-function BuildStats(){
-	let stats = document.getElementsByTagName("stats");
-	
-	for(let i = 0; i < stats.length; i++){
-		toggleClasses(stats[i], ["card","bg-info","p-2", "ml-5","mr-5", "pl-5","pr-5","mb-5","mt-2","rounded"]);
-		let title = wrapContent("h5", "Analytics", ["m-2", "text-light"]);
-		let wrappedPanels = wrapContent("div", stats[i].innerHTML, ["wrapper"],("panels_of_" + i));
-		addToDiv(stats[i], wrappedPanels)
-		addCollapse(stats[i], ("panels_of_" + i), "91%", "0px");
-		addToDiv(stats[i], title, "first");
-	}
+function BuildVolumeIncreases(){
 	
 	let increases = document.getElementsByTagName("VolumeIncreases");
 	for(let i = 0; i < increases.length; i++){
@@ -177,8 +167,6 @@ function BuildStats(){
 		
 		let allLogs = [];
 		let units = [];
-		let firstDate = null;
-		let lastDate = null
 		let sumFirst = 0;
 		let sumLast = 0;
 		
@@ -263,11 +251,114 @@ function BuildStats(){
 		let differenceDiv = wrapContent("div", "Difference: "+ sign + percentDifference + "%", [wariningClass, "m-2", "text-center", "col"]);
 		let sumRow = wrapContent("div", sumFirstDiv + sumLastDiv + differenceDiv, ["bg-dark", "text-light","m-2", "text-center", "row"]);
 		addToDiv(increases[i], sumRow, "last");
-		console.log(allLogs);
-		console.log("Total First: "+ sumFirst);
-		console.log("Total Last: "+ sumLast);
     
 	}
+}
+
+function BuildKPI(){
+	
+	let kpi = document.getElementsByTagName("KPI");
+	for(let i = 0; i < kpi.length; i++){
+		toggleClasses(kpi[i], ["card","text-center", "bg-light","wrapper","p-2","mb-5","mt-2","rounded"]);
+		let title = wrapContent("h6", "Key Numbers", ["m-2", "text-dark"]);
+		addToDiv(kpi[i], title, "first");
+		
+		
+		let WorkoutNumber = 0;
+		let WorkoutsPerWeek = 0;
+		let RepTotal = 0;
+		let SetsTotal = 0;
+		
+		let WorkoutNumberTitle = "Total Sessions";
+		let WorkoutsPerWeekTitle = "Sessions per Week";
+		let RepTotalTitle = "Total Repetitions";
+		let SetsTotalTitle = "Total Sets";
+		
+		let FirstDate = "";
+		let LastDate = "";
+		
+		let allWorkoutDates = [];
+		
+		
+		let exercises = document.getElementsByTagName("exercise");
+	
+		for(let j = 0; j < exercises.length; j++){
+			let sets = exercises[j].getElementsByTagName("set");
+			let hasMoreSets = (sets.length > 1);
+			for(let k = 0; k < sets.length; k++){
+				
+				let logs = sets[k].getElementsByTagName("log");
+				for(let p = 0; p < logs.length; p++){
+					allWorkoutDates.push(getAt(logs[p], "date"));
+					
+					let repString = getAt(logs[p], "reps");
+					if(repString != ""){
+						RepTotal += getRepSum(repString);
+						SetsTotal += getArrayFrom(repString).length;
+					}else{
+						let setRepString = buildRepString(undefined, sets[k]);
+						RepTotal += getRepSum(setRepString);
+						SetsTotal += getArrayFrom(setRepString).length;
+					}
+				}
+				if(allWorkoutDates.length > 0){
+					allWorkoutDates = allWorkoutDates.sort(function(a,b){
+					if(Date.parse(a) > Date.parse(b)) return 1;
+					return -1});
+					FirstDate = allWorkoutDates[0];
+					LastDate = allWorkoutDates[allWorkoutDates.length - 1];
+				}
+				
+			}
+			
+		}
+		
+		WorkoutNumber = allWorkoutDates.filter(onlyUnique).length;
+		
+		let starDate = Date.parse(FirstDate);
+		let endDate = Date.parse(LastDate);
+		
+		WorkoutsPerWeek = (WorkoutNumber / (datediff(starDate, endDate) / 7)).toFixed(1);
+		console.log(WorkoutsPerWeek);
+		
+		addToDiv(kpi[i], "<div class='row m-3 justify-content-center'><h6 class='fw-bold bigText rounded bg-info text-light p-2 pl-4 pr-4'>"+ RepTotal +"</h6>"+ addSpace(5) +"<span class='fw-thin bigText'>"+ calculateKPIExtraSpace(RepTotal, RepTotalTitle) +"</span><div>", "last");
+		
+		addToDiv(kpi[i], "<div class='row m-3 justify-content-center'><h6 class='fw-bold bigText rounded bg-info text-light p-2 pl-4 pr-4'>"+ SetsTotal +"</h6>"+ addSpace(5) +"<span class='fw-thin bigText'>"+ calculateKPIExtraSpace(SetsTotal, SetsTotalTitle) +"</span><div>", "last");
+		
+		
+		addToDiv(kpi[i], "<div class='row m-3 justify-content-center'><h6 class='fw-bold bigText rounded bg-info text-light p-2 pl-4 pr-4'>"+ WorkoutsPerWeek +"</h6>"+ addSpace(5) +"<span class='fw-thin bigText'>"+ calculateKPIExtraSpace(WorkoutsPerWeek, WorkoutsPerWeekTitle) +"</span><div>", "last");
+		
+		addToDiv(kpi[i], "<div class='row m-3 justify-content-center'><h6 class='fw-bold bigText rounded bg-info text-light p-2 pl-4 pr-4'>"+ WorkoutNumber +"</h6>"+ addSpace(5) +"<span class='fw-thin bigText'>"+ calculateKPIExtraSpace(WorkoutNumber, WorkoutNumberTitle) +"</span><div>", "last");
+		console.log(allWorkoutDates);
+    
+	}
+	
+	function calculateKPIExtraSpace(number, title){
+		let totalLength = (number + "").length + title.length;
+		let spaceResult = 26-totalLength;
+		if(spaceResult < 0) spaceResult = 0;
+		return title + addSpace(spaceResult);
+	}
+}
+
+function onlyUnique(value, index, array) {
+  return array.indexOf(value) === index;
+}
+
+
+function BuildStats(){
+	let stats = document.getElementsByTagName("stats");
+	
+	for(let i = 0; i < stats.length; i++){
+		toggleClasses(stats[i], ["card","bg-info","p-2", "ml-5","mr-5", "pl-5","pr-5","mb-5","mt-2","rounded"]);
+		let title = wrapContent("h5", "Analytics", ["m-2", "text-light"]);
+		let wrappedPanels = wrapContent("div", stats[i].innerHTML, ["wrapper"],("panels_of_" + i));
+		addToDiv(stats[i], wrappedPanels)
+		addCollapse(stats[i], ("panels_of_" + i), "91%", "0px");
+		addToDiv(stats[i], title, "first");
+	}
+	BuildVolumeIncreases();
+	BuildKPI();
 }
 
 function getRepSum(reps){
@@ -659,7 +750,7 @@ function addToDiv(el, content, placement){
 function addTooltip(el){
 	let tooltip = getAt(el,"toolTip");
 	if(tooltip == "") return;
-	let tooltipInner = `<button class="tooltipIcon m-1 mr-3" data-toggle="tooltip" data-placement="top" title="`+ tooltip +`">i</button>` 
+	let tooltipInner = `<button class="tooltipIcon m-1 mr-3" data-toggle="tooltip" data-placement="left" title="`+ tooltip +`">i</button>` 
 	let tooltipIcon = wrapContent("div", tooltipInner, ["m-0", "float-right", "p-0"], "tooltipOf_"+el.id, [{key:"style", value:"float:right;"}]);
 	let tooltipRow =  wrapContent("div", tooltipIcon, ["w-100"], "tooltipWrapperOf_"+el.id, [{key:"style", value:"height:20px;"}]);
 	addToDiv(el, tooltipRow, "first");
