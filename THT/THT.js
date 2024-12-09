@@ -216,6 +216,14 @@ function BuildVolumeIncreases(){
 			
 		}
 		let mostUsedUnit = getMostUsedUnit(units);
+
+		let allUnitInputs = document.getElementsByClassName("unitInput");
+		
+		if(mostUsedUnit != ""){
+					for(let j = 0; j < allUnitInputs.length; j++){
+						allUnitInputs[j].value = mostUsedUnit;
+					}
+		}
 		
 		for(let j = 0; j < allLogs.length;j++){
 			let initial = 0.0;
@@ -551,7 +559,7 @@ function addLogForms(){
 		
 		let setPlaceholderString = buildRepString(undefined, document.getElementsByTagName("set")[i]);
 
-		let addUnitCols = wrapContent("input", "", ["m-2", "mt-4","col", "mt-3"], "unitInput_of_"+i, [{key:"placeholder", value:"Unit: kg, lbs, seconds etc..."}]);
+		let addUnitCols = wrapContent("input", "", ["m-2", "mt-4","col", "mt-3", "unitInput"], "unitInput_of_"+i, [{key:"placeholder", value:"Unit: kg, lbs, seconds etc..."}]);
 		
 		let addWeightCols = wrapContent("input", "", ["m-2", "mt-4","col"	], "weightInput_of_"+i, [{key:"placeholder",value:"Load"}]);
 		
